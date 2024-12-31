@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calendar</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border-spacing: 0 10px; 
+    }
+
+    th, td {
+      border: none;
+      text-align: center;
+      padding: 8px;
+      border-radius: 10px;
+      /* Make cells square */
+      width: calc(100% / 7); /* Distribute width equally among 7 columns */
+      height: 50px; /* Adjust this value to control the size of the squares */
+      font-family: "Comic Sans MS", cursive, sans-serif; /* Use Comic Sans font */
+    }
+
+    .legend {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .bar-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .bar {
+      width: 20px;
+      height: 10px;
+      background-color: lightgray;
+      margin-right: 2px;
+    }
+
+    .bar.filled {
+      background-color: green; 
+    }
+
+    tr:last-child {
+      display: none;
+    }
+
+    /* New pastel color scheme */
+    td:nth-child(1) { background-color: #F09EA7; } /* Sunday */
+    td:nth-child(2) { background-color: #F6CA94; } /* Monday */
+    td:nth-child(3) { background-color: #FAFABE; } /* Tuesday */
+    td:nth-child(4) { background-color: #C1EBC0; } /* Wednesday */
+    td:nth-child(5) { background-color: #C7CAFF; } /* Thursday */
+    td:nth-child(6) { background-color: #CDABEB; } /* Friday */
+    td:nth-child(7) { background-color: #F6C2F3; } /* Saturday */
+  </style>
+</head>
+<body>
+
+  <div id="calendar-container"></div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="bar-container">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <span>&#11088;</span> Tasks completed
+    </div>
+    <div class="legend-item">
+      <div class="bar-container">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <span>&#10060;</span> Task failed
+    </div>
+  </div>
+
+
+  <script>
+    function createCalendar(year, month) {
+      const table = document.createElement('table');
+      const headerRow = table.insertRow();
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      days.forEach(day => {
+        const th = document.createElement('th');
+        th.textContent = day;
+        headerRow.appendChild(th);
+      });
+
+      let date = 1;
+      let firstDay = (new Date(year, month)).getDay();
+
+      for (let i = 0; i < 6; i++) {
+        const row = table.insertRow();
+        for (let j = 0; j < 7; j++) {
+          const cell = row.insertCell();
+          if (i === 0 && j < firstDay) {
+            cell.textContent = '';
+          } else if (date > daysInMonth(month, year)) {
+            // Don't break here, continue to create empty cells
+            cell.textContent = ''; 
+          } else {
+            cell.textContent = date;
+            date++;
+          }
+        }
+      }
+
+      return table;
+    }
+
+    function daysInMonth(month, year) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    const calendarContainer = document.getElementById('calendar-container');
+    const calendar = createCalendar(2024, 0);
+    calendarContainer.appendChild(calendar);
+  </script>
+</body>
+</html>
